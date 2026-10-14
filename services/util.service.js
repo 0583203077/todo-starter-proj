@@ -4,7 +4,8 @@ export const utilService = {
     getRandomIntInclusive,
     loadFromStorage,
     saveToStorage,
-    animateCSS
+    animateCSS,
+    getTimeAgo,
 }
 
 function makeId(length = 6) {
@@ -57,4 +58,20 @@ function animateCSS(el, animation='bounce') {
 
         el.addEventListener('animationend', handleAnimationEnd, { once: true })
     })
+}
+
+// For example: 'Just now', '2 minutes ago', 'Couple of hours ago', '3 days ago'
+function getTimeAgo(timestamp) {
+    const minutes = Math.floor((Date.now() - timestamp) / (1000 * 60))
+    if (minutes < 1) return 'Just now'
+    if (minutes === 1) return '1 minute ago'
+    if (minutes < 60) return `${minutes} minutes ago`
+
+    const hours = Math.floor(minutes / 60)
+    if (hours === 1) return 'An hour ago'
+    if (hours < 24) return 'Couple of hours ago'
+
+    const days = Math.floor(hours / 24)
+    if (days === 1) return 'Yesterday'
+    return `${days} days ago`
 }

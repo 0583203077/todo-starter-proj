@@ -1,0 +1,35 @@
+.user-details {
+    max-width: 500px;
+    margin: auto;
+}
+
+.user-edit {
+    display: flex;
+    flex-direction: column;
+    padding: 1em;
+    margin-bottom: 1em;
+    background-color: var(--clr2bg-light);
+    color: var(--gray3);
+    border-radius: 4px;
+}
+
+.user-edit input {
+    margin-bottom: 1em;
+}
+
+.prefs-preview {
+    padding: 1em;
+    margin-bottom: 0.5em;
+    border: 1px solid var(--gray2);
+    border-radius: 4px;
+    text-align: center;
+}
+
+.activities li {
+    padding: 0.5em 0;
+    border-bottom: 1px solid var(--gray1);
+}
+
+.activity-time {
+    font-weight: bold;
+}

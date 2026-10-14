@@ -11,6 +11,7 @@ export const userService = {
     getEmptyCredentials,
     updateBalance,
     addActivity,
+    updateUser,
 }
 const STORAGE_KEY_LOGGEDIN = 'user'
 const STORAGE_KEY = 'userDB'
@@ -77,6 +78,13 @@ function addActivity(txt) {
             // Save only the activities - put() keeps the other fields as they are
             return storageService.put(STORAGE_KEY, { _id: user._id, activities: [...user.activities, activity] })
         })
+}
+
+// Updates the loggedin user's fullname and prefs, returns the loggedin user (as saved in the session)
+function updateUser({ _id, fullname, prefs }) {
+    // Save only these fields - put() keeps the balance and activities as they are
+    return storageService.put(STORAGE_KEY, { _id, fullname, prefs, updatedAt: Date.now() })
+        .then(savedUser => _setLoggedinUser(_addMissingFields(savedUser)))
 }
 
 function _setLoggedinUser(user) {

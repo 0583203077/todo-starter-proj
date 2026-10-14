@@ -26,6 +26,13 @@ export function AppHeader() {
             .catch(err => console.log('err:', err))
     }, [todos])
 
+    // Apply the loggedin user's preferences to the whole app (and remove them on logout)
+    useEffect(() => {
+        const prefs = user && user.prefs
+        document.body.style.color = prefs ? prefs.color : ''
+        document.body.style.backgroundColor = prefs ? prefs.bgColor : ''
+    }, [user])
+
     function onLogout() {
         userService.logout()
             .then(() => {
