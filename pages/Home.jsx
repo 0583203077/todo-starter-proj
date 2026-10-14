@@ -10,7 +10,7 @@ export function Home() {
         <section className="home">
             <h1>Todo's R Us!</h1>
             <ToggleButton val={isOn} setVal={setIsOn} />
-            {isOn && <img src="../assets/img/todo.png" alt="" />}
+            {isOn && <img src="assets/img/todo.png" alt="" />}
         </section>
     )
 }

@@ -13,6 +13,7 @@ export const todoService = {
     getDefaultFilter,
     getFilterFromSearchParams,
     getImportanceStats,
+    getDoneTodosPercent,
 }
 // For Debug (easy access from console):
 window.cs = todoService
@@ -27,6 +28,12 @@ function query(filterBy = {}) {
 
             if (filterBy.importance) {
                 todos = todos.filter(todo => todo.importance >= filterBy.importance)
+            }
+
+            if (filterBy.status === 'active') {
+                todos = todos.filter(todo => !todo.isDone)
+            } else if (filterBy.status === 'done') {
+                todos = todos.filter(todo => todo.isDone)
             }
 
             return todos
@@ -57,12 +64,13 @@ function save(todo) {
     }
 }
 
-function getEmptyTodo(txt = '', importance = 5) {
-    return { txt, importance, isDone: false }
+function getEmptyTodo(txt = '', importance = 5, color = '#99a695') {
+    return { txt, importance, isDone: false, color }
 }
 
 function getDefaultFilter() {
-    return { txt: '', importance: 0 }
+    // status: '' (all) | 'active' | 'done'
+    return { txt: '', importance: 0, status: '' }
 }
 
 function getFilterFromSearchParams(searchParams) {
@@ -85,21 +93,33 @@ function getImportanceStats() {
 
 }
 
+// Uses all the todos (not the filtered list), so the progress bar is always correct
+function getDoneTodosPercent() {
+    return storageService.query(TODO_KEY)
+        .then(todos => {
+            if (!todos.length) return 0
+            const doneTodosCount = todos.filter(todo => todo.isDone).length
+            return Math.round(doneTodosCount * 100 / todos.length)
+        })
+}
+
 function _createTodos() {
     let todos = utilService.loadFromStorage(TODO_KEY)
     if (!todos || !todos.length) {
         todos = []
         const txts = ['Learn React', 'Master CSS', 'Practice Redux']
+        const colors = ['#99a695', '#cdddc8', '#e9cedd', '#f6e3b4', '#c9def4']
         for (let i = 0; i < 20; i++) {
             const txt = txts[utilService.getRandomIntInclusive(0, txts.length - 1)]
-            todos.push(_createTodo(txt + (i + 1), utilService.getRandomIntInclusive(1, 10)))
+            const color = colors[utilService.getRandomIntInclusive(0, colors.length - 1)]
+            todos.push(_createTodo(txt + (i + 1), utilService.getRandomIntInclusive(1, 10), color))
         }
         utilService.saveToStorage(TODO_KEY, todos)
     }
 }
 
-function _createTodo(txt, importance) {
-    const todo = getEmptyTodo(txt, importance)
+function _createTodo(txt, importance, color) {
+    const todo = getEmptyTodo(txt, importance, color)
     todo._id = utilService.makeId()
     todo.createdAt = todo.updatedAt = Date.now() - utilService.getRandomIntInclusive(0, 1000 * 60 * 60 * 24)
     return todo
@@ -133,6 +153,7 @@ function _getTodoCountByImportanceMap(todos) {
 //     txt: "Master Redux",
 //     importance: 9,
 //     isDone: false,
+//     color: "#99a695",
 //     createdAt: 1711472269690,
 //     updatedAt: 1711472269690
 // }

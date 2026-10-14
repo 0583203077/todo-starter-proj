@@ -14,6 +14,14 @@
     flex-grow: 1;
 }
 
+.user-balance {
+    margin-inline-start: 0.8em;
+    padding: 0.2em 0.6em;
+    border-radius: 1em;
+    background-color: var(--clr2);
+    font-weight: bold;
+}
+
 .app-nav {
     display: flex;
     gap: 15px;

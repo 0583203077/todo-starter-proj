@@ -11,6 +11,12 @@
     grid-column: 1/-1;
 }
 
+/* Header, page content, footer - the footer stays at the bottom on short pages */
+.app {
+    min-height: 100vh;
+    grid-template-rows: auto 1fr auto;
+}
+
 .container {
     max-width: 800px;
     padding: 1em;

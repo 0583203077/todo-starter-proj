@@ -1,0 +1,14 @@
+.app-footer {
+    background-color: var(--clr1);
+    color: var(--clr2bg-light);
+    margin-top: 2em;
+}
+
+.footer-container {
+    padding: 0.5em 0;
+    text-align: center;
+}
+
+.footer-container p {
+    margin: 0;
+}
