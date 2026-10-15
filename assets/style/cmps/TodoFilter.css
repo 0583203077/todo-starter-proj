@@ -1,6 +1,48 @@
 .todo-filter {
-    background-color: var(--clr2bg);
-    padding: 1em;
-    margin: 1em 0;
+    background-color: var(--clr2bg-light);
+    padding: 1em 1.2em 1.2em;
+    margin: 1.2em 0;
+    border: 1px solid var(--clr2bg);
+    border-radius: var(--radius);
+    color: var(--gray3);
+    box-shadow: var(--shadow);
 }
 
+.todo-filter h2 {
+    margin-top: 0;
+    font-size: 1.2em;
+}
+
+.todo-filter form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 1em;
+}
+
+/* A small label above each control */
+.filter-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3em;
+    flex: 1 1 140px;
+}
+
+/* The search field takes the extra space */
+.filter-field.filter-txt {
+    flex: 3 1 220px;
+}
+
+/* Same height for the inputs and the select, so the labels line up */
+.filter-field input,
+.filter-field select {
+    height: 2.6em;
+}
+
+.filter-field label {
+    font-size: 0.8em;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--clr2);
+}

@@ -4,4 +4,16 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 1em;
+    padding: 3em 0;
+    text-align: center;
+}
+
+.home h1 {
+    font-size: 3em;
+    color: var(--clr1);
+}
+
+.home img {
+    max-width: 250px;
 }

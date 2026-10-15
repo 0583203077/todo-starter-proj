@@ -2,11 +2,18 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    max-width: 700px;
+    margin: 2em auto;
+    padding: 1.5em;
+    background-color: var(--clr2bg-light);
+    border-radius: var(--radius);
+    color: var(--gray3);
+    box-shadow: var(--shadow);
 }
 .todo-details h1 {
     color: var(--clr1);
     font-size: 2em;
-    
+
 }
 .todo-details h5 {
     color: var(--clr2);
@@ -15,4 +22,16 @@
     max-width: 200px;
     display: block;
     margin: auto;
+}
+.todo-details button {
+    margin-left: 0;
+}
+/* Next / Previous links */
+.todo-details a {
+    color: var(--clr2);
+    font-weight: bold;
+    margin: 0 0.3em;
+}
+.todo-details a:hover {
+    text-decoration: underline;
 }

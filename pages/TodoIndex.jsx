@@ -89,7 +89,7 @@ export function TodoIndex() {
         <section className="todo-index">
             <TodoFilter filterBy={defaultFilter} onSetFilterBy={onSetFilterBy} />
             <div>
-                <Link to="/todo/edit" className="btn" >Add Todo</Link>
+                <Link to="/todo/edit" className="btn btn-primary" >Add Todo</Link>
             </div>
             <h2>Todos List</h2>
             {isLoading && <div className="loading">Loading todos...</div>}
@@ -98,7 +98,7 @@ export function TodoIndex() {
                 <TodoList todos={todos} onRemoveTodo={onRemoveTodo} onToggleTodo={onToggleTodo} />
                 <hr />
                 <h2>Todos Table</h2>
-                <div style={{ width: '60%', margin: 'auto' }}>
+                <div className="table-container">
                     <DataTable todos={todos} onRemoveTodo={onRemoveTodo} />
                 </div>
             </React.Fragment>}

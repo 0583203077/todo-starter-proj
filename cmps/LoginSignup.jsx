@@ -19,6 +19,12 @@ export function LoginSignup({ onSetUser }) {
     }
 
 
+    function onToggleSignup(ev) {
+        // Without this, href="#" changes the URL to the Home route (we use a HashRouter)
+        ev.preventDefault()
+        setIsSignUp(!isSignup)
+    }
+
     function onLogin(credentials) {
         isSignup ? signup(credentials) : login(credentials)
     }
@@ -70,7 +76,7 @@ export function LoginSignup({ onSetUser }) {
             </form>
 
             <div className="btns">
-                <a href="#" onClick={() => setIsSignUp(!isSignup)}>
+                <a href="#" onClick={onToggleSignup}>
                     {isSignup ?
                         'Already a member? Login' :
                         'New user? Signup here'

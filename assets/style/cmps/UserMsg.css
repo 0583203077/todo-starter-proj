@@ -5,9 +5,9 @@
     bottom: 1em;
     right: 1em;
     color: white;
-    font-weight: bold;
-    border: 3px solid black;
-    border-radius: 2px;
+    font-weight: 600;
+    border-radius: var(--radius);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
 }
 
 .user-msg.success {

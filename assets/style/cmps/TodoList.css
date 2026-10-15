@@ -12,4 +12,51 @@
     justify-content: space-around;
     align-items: center;
     background-color: var(--clr1bg);
+    color: var(--gray3);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.todo-list li:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+}
+
+/* Remove / Details / Edit in one row */
+.todo-list li section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding-bottom: 0.5em;
+}
+
+/* Light buttons, so they are visible on every todo color */
+.todo-list li button {
+    background-color: rgba(255, 255, 255, 0.8);
+    margin: 0.2em;
+    padding: 0.35em 0.55em;
+    font-size: 0.9em;
+}
+
+.todo-list li button:hover {
+    background-color: var(--clr2);
+}
+
+.no-todos,
+.loading {
+    padding: 2em;
+    text-align: center;
+    font-size: 1.2em;
+    color: var(--gray2);
+}
+
+.table-container {
+    max-width: 800px;
+    margin: auto;
+    overflow-x: auto;
+}
+
+.table-container .data-table {
+    margin: 25px auto;
 }

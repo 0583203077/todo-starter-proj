@@ -11,4 +11,11 @@
   --gray2: rgb(155, 155, 155);
   --gray3: rgb(44, 44, 44);
 
-} 
+  /* Fonts */
+  --font-main: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  --font-headings: 'Poppins', 'Inter', system-ui, sans-serif;
+
+  /* Shared look for cards and inputs */
+  --radius: 8px;
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}

@@ -6,9 +6,18 @@
     align-items: center;
 }
 
+.todo-preview h2 {
+    cursor: pointer;
+    font-size: 1.15em;
+}
+
 .todo-preview h4 {
     text-transform: capitalize;
     color: black;
+    font-family: var(--font-main);
+    font-weight: 500;
+    font-size: 0.9em;
+    margin: 0 0 0.5em;
 }
 
 .todo-preview img {

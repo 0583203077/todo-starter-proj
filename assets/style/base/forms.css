@@ -1,19 +1,64 @@
 button, .btn {
     cursor: pointer;
     background-color: var(--clr2bg);
+    color: var(--gray3);
     margin: 0.5em;
     border: 0;
-    padding: 0.5em 0.8em;
-    border-radius: 4px;
+    padding: 0.5em 0.9em;
+    border-radius: 6px;
+    font: inherit;
+    font-weight: 500;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+/* A link that looks like a button (the button's own display is kept, so <button hidden> stays hidden) */
+.btn {
+    display: inline-block;
 }
 
 button:hover, .btn:hover {
     background-color: var(--clr2);
     color: white;
-    transition: 0.3s;
 }
 
-input:focus {
-    background-color: var(--clr1bg);
-    transition: background-color 1s;
+/* The main action of a page, for example "Add Todo" */
+.btn-primary {
+    background-color: var(--clr2);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--clr1);
+}
+
+input[type="text"],
+input[type="search"],
+input[type="number"],
+input[type="password"],
+select {
+    font: inherit;
+    padding: 0.5em 0.7em;
+    border: 1px solid rgb(210, 210, 210);
+    border-radius: 6px;
+    background-color: white;
+    color: var(--gray3);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input[type="color"] {
+    width: 3em;
+    height: 2.2em;
+    padding: 0.15em;
+    border: 1px solid rgb(210, 210, 210);
+    border-radius: 6px;
+    background-color: white;
+    cursor: pointer;
+}
+
+/* A soft colored ring around the field you are typing in */
+input:focus,
+select:focus {
+    outline: none;
+    border-color: var(--clr2);
+    box-shadow: 0 0 0 3px rgba(120, 99, 110, 0.25);
 }

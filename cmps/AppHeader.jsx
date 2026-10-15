@@ -51,23 +51,23 @@ export function AppHeader() {
         <header className="app-header full main-layout">
             <section className="header-container">
                 <h1>React Todo App</h1>
-                {user ? (
-                    < section >
-                        <Link to={`/user/${user._id}`}>Hello {user.fullname}</Link>
-                        <span className="user-balance">Balance: {user.balance}</span>
-                        <button onClick={onLogout}>Logout</button>
-                    </ section >
-                ) : (
-                    <section>
-                        <LoginSignup onSetUser={onSetUser} />
-                    </section>
-                )}
                 <nav className="app-nav">
                     <NavLink to="/" >Home</NavLink>
                     <NavLink to="/about" >About</NavLink>
                     <NavLink to="/todo" >Todos</NavLink>
                     <NavLink to="/dashboard" >Dashboard</NavLink>
                 </nav>
+                {user ? (
+                    <section className="user-area">
+                        <Link to={`/user/${user._id}`}>Hello {user.fullname}</Link>
+                        <span className="user-balance">Balance: {user.balance}</span>
+                        <button onClick={onLogout}>Logout</button>
+                    </section>
+                ) : (
+                    <section className="user-area">
+                        <LoginSignup onSetUser={onSetUser} />
+                    </section>
+                )}
             </section>
             <TodoProgress percent={doneTodosPercent} />
             <UserMsg />

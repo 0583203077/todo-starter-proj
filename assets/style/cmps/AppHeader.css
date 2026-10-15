@@ -1,30 +1,117 @@
 .app-header {
     background-color: var(--clr1);
     color: var(--clr2bg-light);
-    
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
+/* Title | nav | user area */
 .header-container {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-
+    gap: 0.6em 1.5em;
+    padding: 0.8em 0 0.4em;
 }
 
 .header-container h1 {
-    flex-grow: 1;
-}
-
-.user-balance {
-    margin-inline-start: 0.8em;
-    padding: 0.2em 0.6em;
-    border-radius: 1em;
-    background-color: var(--clr2);
-    font-weight: bold;
+    margin: 0;
+    font-size: 1.5em;
+    font-weight: 700;
+    color: white;
 }
 
 .app-nav {
+    flex-grow: 1;
     display: flex;
-    gap: 15px;
+    flex-wrap: wrap;
+    gap: 0.3em;
+}
+
+.app-nav a {
+    padding: 0.35em 0.9em;
+    border-radius: 999px;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.app-nav a:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+.app-nav a.active {
+    background-color: var(--clr2bg-light);
+    color: var(--clr1);
+    text-decoration: none;
+}
+
+/* Loggedin user: name, balance and logout */
+.user-area {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6em;
+}
+
+.user-area > a {
+    font-weight: 500;
+}
+
+.user-area > a:hover {
+    text-decoration: underline;
+}
+
+.user-balance {
+    padding: 0.2em 0.7em;
+    border-radius: 999px;
+    background-color: var(--clr2);
+    font-weight: 600;
+    font-size: 0.9em;
+    white-space: nowrap;
+}
+
+.user-area > button {
+    margin: 0;
+    background-color: transparent;
+    color: inherit;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.user-area > button:hover {
+    background-color: var(--clr2);
+    border-color: var(--clr2);
+}
+
+/* Login / signup form inside the header */
+.login-form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4em;
+}
+
+.login-form input {
+    width: 9em;
+    padding: 0.35em 0.6em;
+    border-color: transparent;
+}
+
+.login-form button {
+    margin: 0;
+    padding: 0.35em 0.9em;
+}
+
+.login-page .btns {
+    font-size: 0.85em;
+    margin-top: 0.3em;
+}
+
+.login-page .btns a {
+    text-decoration: underline;
+    opacity: 0.9;
+}
+
+.app-header .todo-progress {
+    margin-bottom: 0.8em;
 }
 
 
@@ -38,5 +125,15 @@ a.active {
 @media (max-width: 720px) {
     .app-header {
         color: var(--clr2bg-light);
+    }
+
+    /* On small screens: title, nav and user area - each on its own line */
+    .header-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .app-nav a {
+        padding: 0.3em 0.6em;
     }
 }

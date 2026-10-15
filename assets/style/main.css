@@ -18,6 +18,7 @@
 @import "cmps/DataTable.css";
 @import "cmps/FancyBox.css";
 @import "cmps/SplitPane.css";
+@import "cmps/Home.css";
 
 @import "cmps/TodoFilter.css";
 @import "cmps/TodoList.css";
