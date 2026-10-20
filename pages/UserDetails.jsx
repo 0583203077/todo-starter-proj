@@ -1,11 +1,11 @@
 import { userService } from "../services/user.service.js"
 import { utilService } from "../services/util.service.js"
 import { showErrorMsg, showSuccessMsg } from "../services/event-bus.service.js"
-import { SET_USER } from "../store/store.js"
+import { updateUser } from "../store/actions/user.actions.js"
 
 const { useState, useEffect } = React
 const { useParams, useNavigate } = ReactRouterDOM
-const { useSelector, useDispatch } = ReactRedux
+const { useSelector } = ReactRedux
 
 export function UserDetails() {
 
@@ -14,7 +14,6 @@ export function UserDetails() {
     const loggedinUser = useSelector(storeState => storeState.loggedinUser)
     const params = useParams()
     const navigate = useNavigate()
-    const dispatch = useDispatch()
 
     useEffect(() => {
         loadUser()
@@ -53,9 +52,8 @@ export function UserDetails() {
 
     function onSaveUser(ev) {
         ev.preventDefault()
-        userService.updateUser({ _id: user._id, ...userToEdit })
-            .then(savedLoggedinUser => {
-                dispatch({ type: SET_USER, loggedinUser: savedLoggedinUser })
+        updateUser({ _id: user._id, ...userToEdit })
+            .then(() => {
                 setUser(prevUser => ({ ...prevUser, ...userToEdit }))
                 showSuccessMsg('Your details were saved')
             })
@@ -90,7 +88,7 @@ export function UserDetails() {
                     <input onChange={handleChange} value={userToEdit.prefs.bgColor} type="color" name="bgColor" id="bgColor" />
 
                     <div className="prefs-preview" style={{ color: userToEdit.prefs.color, backgroundColor: userToEdit.prefs.bgColor }}>
-                        Preview: this is how the app will look
+                        Preview: this is how the header and footer will look
                     </div>
 
                     <button>Save</button>

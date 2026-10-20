@@ -1,15 +1,14 @@
 const { useEffect } = React
 const { Link, NavLink } = ReactRouterDOM
 const { useNavigate } = ReactRouter
-const { useSelector, useDispatch } = ReactRedux
+const { useSelector } = ReactRedux
 
-import { userService } from '../services/user.service.js'
-import { todoService } from '../services/todo.service.js'
 import { UserMsg } from "./UserMsg.jsx"
 import { LoginSignup } from './LoginSignup.jsx'
 import { TodoProgress } from './TodoProgress.jsx'
 import { showErrorMsg } from '../services/event-bus.service.js'
-import { SET_USER, SET_DONE_TODOS_PERCENT } from '../store/store.js'
+import { logout } from '../store/actions/user.actions.js'
+import { loadDoneTodosPercent } from '../store/actions/todo.actions.js'
 
 
 export function AppHeader() {
@@ -17,38 +16,30 @@ export function AppHeader() {
     const user = useSelector(storeState => storeState.loggedinUser)
     const todos = useSelector(storeState => storeState.todos)
     const doneTodosPercent = useSelector(storeState => storeState.doneTodosPercent)
-    const dispatch = useDispatch()
 
     // Recalculate whenever the todos in the store change (load, add, update, remove)
     useEffect(() => {
-        todoService.getDoneTodosPercent()
-            .then(doneTodosPercent => dispatch({ type: SET_DONE_TODOS_PERCENT, doneTodosPercent }))
+        loadDoneTodosPercent()
             .catch(err => console.log('err:', err))
     }, [todos])
 
-    // Apply the loggedin user's preferences to the whole app (and remove them on logout)
-    useEffect(() => {
-        const prefs = user && user.prefs
-        document.body.style.color = prefs ? prefs.color : ''
-        document.body.style.backgroundColor = prefs ? prefs.bgColor : ''
-    }, [user])
+    // The loggedin user's color preferences color the header (no user - the default colors from the CSS)
+    const prefsStyle = (user && user.prefs) ? { color: user.prefs.color, backgroundColor: user.prefs.bgColor } : {}
 
     function onLogout() {
-        userService.logout()
-            .then(() => {
-                onSetUser(null)
-            })
+        logout()
+            .then(() => navigate('/'))
             .catch((err) => {
                 showErrorMsg('OOPs try again')
             })
     }
 
-    function onSetUser(user) {
-        dispatch({ type: SET_USER, loggedinUser: user })
+    // The login / signup action already saved the user in the store
+    function onLoggedIn() {
         navigate('/')
     }
     return (
-        <header className="app-header full main-layout">
+        <header className="app-header full main-layout" style={prefsStyle}>
             <section className="header-container">
                 <h1>React Todo App</h1>
                 <nav className="app-nav">
@@ -65,7 +56,7 @@ export function AppHeader() {
                     </section>
                 ) : (
                     <section className="user-area">
-                        <LoginSignup onSetUser={onSetUser} />
+                        <LoginSignup onLoggedIn={onLoggedIn} />
                     </section>
                 )}
             </section>

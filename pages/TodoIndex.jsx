@@ -1,20 +1,21 @@
 import { TodoFilter } from "../cmps/TodoFilter.jsx"
 import { TodoList } from "../cmps/TodoList.jsx"
 import { DataTable } from "../cmps/data-table/DataTable.jsx"
+import { TodoPagination } from "../cmps/TodoPagination.jsx"
 import { todoService } from "../services/todo.service.js"
-import { userService } from "../services/user.service.js"
 import { showErrorMsg, showSuccessMsg } from "../services/event-bus.service.js"
-import { SET_TODOS, REMOVE_TODO, UPDATE_TODO, SET_IS_LOADING, SET_FILTER_BY, SET_USER_BALANCE } from "../store/store.js"
+import { loadTodos, setFilterBy, removeTodo, toggleTodo } from "../store/actions/todo.actions.js"
 
 const { Link, useSearchParams } = ReactRouterDOM
-const { useSelector, useDispatch } = ReactRedux
+const { useSelector } = ReactRedux
 
 export function TodoIndex() {
 
     const todos = useSelector(storeState => storeState.todos)
     const isLoading = useSelector(storeState => storeState.isLoading)
+    const filterBy = useSelector(storeState => storeState.filterBy)
+    const maxPage = useSelector(storeState => storeState.maxPage)
     const loggedinUser = useSelector(storeState => storeState.loggedinUser)
-    const dispatch = useDispatch()
 
     // Special hook for accessing search-params:
     const [searchParams, setSearchParams] = useSearchParams()
@@ -23,32 +24,49 @@ export function TodoIndex() {
     const defaultFilter = todoService.getFilterFromSearchParams(searchParams)
 
     // TodoFilter calls this when it first shows up, and on every change
-    function onSetFilterBy(filterBy) {
-        // Update the URL only when the filter is different from what is already there
-        if (JSON.stringify(filterBy) !== JSON.stringify(defaultFilter)) setSearchParams(filterBy)
-        dispatch({ type: SET_FILTER_BY, filterBy })
-        loadTodos(filterBy)
+    function onSetFilterBy(newFilterBy) {
+        // A new text / importance / status starts again from the first page.
+        // When the page first shows up, the filter is the same as in the URL - so we keep the URL's page
+        const isNewFilter = newFilterBy.txt !== defaultFilter.txt
+            || newFilterBy.importance !== defaultFilter.importance
+            || newFilterBy.status !== defaultFilter.status
+        applyFilter({ ...newFilterBy, pageIdx: isNewFilter ? 0 : defaultFilter.pageIdx })
     }
 
-    function loadTodos(filterBy) {
-        dispatch({ type: SET_IS_LOADING, isLoading: true })
-        todoService.query(filterBy)
-            .then(todos => dispatch({ type: SET_TODOS, todos }))
+    // diff: -1 for the previous page, 1 for the next page
+    function onChangePage(diff) {
+        applyFilter({ ...filterBy, pageIdx: filterBy.pageIdx + diff })
+    }
+
+    // Saves the filter in the URL and in the store, and loads its page
+    function applyFilter(filterBy) {
+        // Update the URL only when the filter is different from what is already there
+        if (JSON.stringify(filterBy) !== JSON.stringify(defaultFilter)) setSearchParams(filterBy)
+        setFilterBy(filterBy)
+        loadPage(filterBy)
+    }
+
+    function loadPage(filterBy) {
+        loadTodos(filterBy)
+            .then(({ maxPage }) => {
+                // The page doesn't exist anymore (for example: we removed its last todo) - go to the last page
+                if (filterBy.pageIdx > 0 && filterBy.pageIdx >= maxPage) {
+                    applyFilter({ ...filterBy, pageIdx: Math.max(maxPage - 1, 0) })
+                }
+            })
             .catch(err => {
                 console.error('err:', err)
                 showErrorMsg('Cannot load todos')
             })
-            .finally(() => dispatch({ type: SET_IS_LOADING, isLoading: false }))
     }
 
     function onRemoveTodo(todoId) {
         if (!confirm('Are you sure you want to delete this todo?')) return
-        const todo = todos.find(todo => todo._id === todoId)
-        todoService.remove(todoId)
+        removeTodo(todoId)
             .then(() => {
-                dispatch({ type: REMOVE_TODO, todoId })
                 showSuccessMsg(`Todo removed`)
-                if (loggedinUser) return userService.addActivity(`Removed the Todo: '${todo.txt}'`)
+                // Load the page again, so the next todo moves up into this page
+                loadPage(filterBy)
             })
             .catch(err => {
                 console.log('err:', err)
@@ -57,32 +75,17 @@ export function TodoIndex() {
     }
 
     function onToggleTodo(todo) {
-        const todoToSave = { ...todo, isDone: !todo.isDone }
-        todoService.save(todoToSave)
-            .then((savedTodo) => {
-                dispatch({ type: UPDATE_TODO, todo: savedTodo })
-                showSuccessMsg(`Todo is ${(savedTodo.isDone)? 'done' : 'back on your list'}`)
-                if (!loggedinUser) return
-
-                const activityTxt = savedTodo.isDone ? 'Completed the Todo' : 'Marked as not done the Todo'
-                if (savedTodo.isDone) {
-                    // It was not done before the toggle - so it changed from not done to done.
-                    // One after the other, so the two saves of the user don't overwrite each other
-                    return rewardUser()
-                        .then(() => userService.addActivity(`${activityTxt}: '${savedTodo.txt}'`))
-                }
-                return userService.addActivity(`${activityTxt}: '${savedTodo.txt}'`)
-            })
+        // Only a loggedin user can complete a todo (the action checks it too)
+        if (!loggedinUser) {
+            showErrorMsg('Please log in to change the todo status')
+            return
+        }
+        toggleTodo(todo)
+            .then(savedTodo => showSuccessMsg(`Todo is ${(savedTodo.isDone)? 'done' : 'back on your list'}`))
             .catch(err => {
                 console.log('err:', err)
                 showErrorMsg('Cannot toggle todo ' + todo._id)
             })
-    }
-
-    // The balance only grows - we don't take points back when a todo is marked as not done
-    function rewardUser() {
-        return userService.updateBalance(10)
-            .then(balance => dispatch({ type: SET_USER_BALANCE, balance }))
     }
 
     return (
@@ -94,8 +97,12 @@ export function TodoIndex() {
             <h2>Todos List</h2>
             {isLoading && <div className="loading">Loading todos...</div>}
             {!isLoading && !todos.length && <div className="no-todos">No todos to show...</div>}
+            {!isLoading && !!todos.length && <TodoList todos={todos} onRemoveTodo={onRemoveTodo} onToggleTodo={onToggleTodo} />}
+
+            {/* Outside the loading check, so it doesn't jump while the next page is loading */}
+            {maxPage > 1 && <TodoPagination pageIdx={filterBy.pageIdx} maxPage={maxPage} onChangePage={onChangePage} />}
+
             {!isLoading && !!todos.length && <React.Fragment>
-                <TodoList todos={todos} onRemoveTodo={onRemoveTodo} onToggleTodo={onToggleTodo} />
                 <hr />
                 <h2>Todos Table</h2>
                 <div className="table-container">

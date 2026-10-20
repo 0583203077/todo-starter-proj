@@ -32,6 +32,17 @@
     height: 1.2em;
 }
 
+.todo-edit form input[type="checkbox"]:disabled {
+    margin-bottom: 0.3em;
+    cursor: not-allowed;
+}
+
+.todo-edit .login-hint {
+    margin: 0 0 1em;
+    font-size: 0.85em;
+    color: var(--clr2);
+}
+
 .todo-edit form button {
     margin: 0.5em 0 0;
     background-color: var(--clr2);

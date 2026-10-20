@@ -1,0 +1,27 @@
+.todo-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+    margin: 1.5em 0 0.5em;
+}
+
+.todo-pagination span {
+    font-weight: 600;
+    color: var(--clr1);
+}
+
+.todo-pagination button {
+    margin: 0;
+    min-width: 6em;
+}
+
+.todo-pagination button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.todo-pagination button:disabled:hover {
+    background-color: var(--clr2bg);
+    color: var(--gray3);
+}

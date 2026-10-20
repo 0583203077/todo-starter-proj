@@ -2,6 +2,7 @@ import { utilService } from './util.service.js'
 import { storageService } from './async-storage.service.js'
 
 const TODO_KEY = 'todoDB'
+const PAGE_SIZE = 5
 _createTodos()
 
 export const todoService = {
@@ -36,7 +37,17 @@ function query(filterBy = {}) {
                 todos = todos.filter(todo => todo.isDone)
             }
 
-            return todos
+            // Newest todos first (before paging - so a new todo is on the first page)
+            todos.sort((todo1, todo2) => todo2.createdAt - todo1.createdAt)
+
+            // Paging - only when a pageIdx is given (the Dashboard asks for all the todos)
+            const maxPage = Math.ceil(todos.length / PAGE_SIZE)
+            if (filterBy.pageIdx !== undefined) {
+                const startIdx = filterBy.pageIdx * PAGE_SIZE
+                todos = todos.slice(startIdx, startIdx + PAGE_SIZE)
+            }
+
+            return { todos, maxPage }
         })
 }
 
@@ -70,7 +81,8 @@ function getEmptyTodo(txt = '', importance = 5, color = '#99a695') {
 
 function getDefaultFilter() {
     // status: '' (all) | 'active' | 'done'
-    return { txt: '', importance: 0, status: '' }
+    // pageIdx: 0 is the first page
+    return { txt: '', importance: 0, status: '', pageIdx: 0 }
 }
 
 function getFilterFromSearchParams(searchParams) {
@@ -79,6 +91,8 @@ function getFilterFromSearchParams(searchParams) {
     for (const field in defaultFilter) {
         filterBy[field] = searchParams.get(field) || ''
     }
+    // The page is a number (a URL without a page starts from the first page)
+    filterBy.pageIdx = +filterBy.pageIdx || 0
     return filterBy
 }
 

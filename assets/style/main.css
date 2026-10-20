@@ -22,6 +22,7 @@
 
 @import "cmps/TodoFilter.css";
 @import "cmps/TodoList.css";
+@import "cmps/TodoPagination.css";
 @import "cmps/TodoPreview.css";
 @import "cmps/TodoDetails.css";
 @import "cmps/TodoEdit.css";

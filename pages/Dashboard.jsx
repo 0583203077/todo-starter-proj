@@ -9,7 +9,7 @@ export function Dashboard() {
 
     useEffect(()=>{
         todoService.query()
-            .then(setTodos)
+            .then(({ todos }) => setTodos(todos))
         todoService.getImportanceStats()
             .then(setImportanceStats)
     }, [])
