@@ -1,7 +1,8 @@
 import { todoService } from "../../services/todo.service.js"
 import { userService } from "../../services/user.service.js"
 import { updateBalance } from "./user.actions.js"
-import { store, SET_TODOS, REMOVE_TODO, ADD_TODO, UPDATE_TODO, SET_IS_LOADING, SET_FILTER_BY, SET_DONE_TODOS_PERCENT, SET_MAX_PAGE } from "../store.js"
+import { store } from "../store.js"
+import { SET_TODOS, REMOVE_TODO, ADD_TODO, UPDATE_TODO, SET_IS_LOADING, SET_FILTER_BY, SET_DONE_TODOS_PERCENT, SET_MAX_PAGE } from "../reducers/todo.reducer.js"
 
 // Each action calls the todoService and then commits the result to the store.
 // The component that calls it shows the success / error message.
@@ -23,7 +24,7 @@ export function setFilterBy(filterBy) {
 }
 
 export function removeTodo(todoId) {
-    const todo = store.getState().todos.find(todo => todo._id === todoId)
+    const todo = store.getState().todoStore.todos.find(todo => todo._id === todoId)
     return todoService.remove(todoId)
         .then(() => {
             store.dispatch({ type: REMOVE_TODO, todoId })
@@ -37,7 +38,7 @@ export function saveTodo(todo, wasDone) {
     const isNewTodo = !todo._id
     // Only a loggedin user can change if a todo is done (a new todo is "not done" before)
     const isStatusChanged = isNewTodo ? todo.isDone : todo.isDone !== wasDone
-    if (isStatusChanged && !store.getState().loggedinUser) {
+    if (isStatusChanged && !store.getState().userStore.loggedinUser) {
         return Promise.reject('Only a loggedin user can change the todo status')
     }
 
@@ -55,7 +56,7 @@ export function saveTodo(todo, wasDone) {
 // Done <-> not done (clicking the todo in the list)
 export function toggleTodo(todo) {
     // Only a loggedin user can change if a todo is done
-    if (!store.getState().loggedinUser) {
+    if (!store.getState().userStore.loggedinUser) {
         return Promise.reject('Only a loggedin user can change the todo status')
     }
 
@@ -80,7 +81,7 @@ export function loadDoneTodosPercent() {
 // One after the other, so the two saves of the user don't overwrite each other.
 // We don't wait for it - the todo is already saved, so the component can show its message right away.
 function _updateLoggedinUser(activityTxt, isCompleted) {
-    if (!store.getState().loggedinUser) return
+    if (!store.getState().userStore.loggedinUser) return
 
     if (!isCompleted) {
         userService.addActivity(activityTxt)

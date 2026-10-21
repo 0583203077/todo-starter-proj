@@ -38,7 +38,12 @@ function signup({ username, password, fullname }) {
     const user = _addMissingFields({ username, password, fullname })
     user.createdAt = user.updatedAt = Date.now()
 
-    return storageService.post(STORAGE_KEY, user)
+    return storageService.query(STORAGE_KEY)
+        .then(users => {
+            // Two users with the same username could not both log in
+            if (users.some(currUser => currUser.username === username)) return Promise.reject('Username is taken')
+            return storageService.post(STORAGE_KEY, user)
+        })
         .then(_setLoggedinUser)
 }
 

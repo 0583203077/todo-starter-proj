@@ -16,7 +16,7 @@ export function About() {
     return (
         <section className="about">
             <h1 ref={titleRef}>About todos and us...</h1>
-            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Optio dolore sapiente, iste animi corporis nisi atque tempora assumenda dolores. Nobis nam dolorem rerum illo facilis nemo sit voluptatibus laboriosam necessitatibus!</p>
+            <p>React Todo App helps you manage your daily tasks: add todos, give them an importance and a color, filter them and follow your progress. Log in to complete todos, earn 10 points for each one and see your activities on your user page.</p>
             <button onClick={() => {
                 utilService.animateCSS(titleRef.current)
             }}>Animate</button>

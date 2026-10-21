@@ -11,11 +11,11 @@ const { useSelector } = ReactRedux
 
 export function TodoIndex() {
 
-    const todos = useSelector(storeState => storeState.todos)
-    const isLoading = useSelector(storeState => storeState.isLoading)
-    const filterBy = useSelector(storeState => storeState.filterBy)
-    const maxPage = useSelector(storeState => storeState.maxPage)
-    const loggedinUser = useSelector(storeState => storeState.loggedinUser)
+    const todos = useSelector(storeState => storeState.todoStore.todos)
+    const isLoading = useSelector(storeState => storeState.todoStore.isLoading)
+    const filterBy = useSelector(storeState => storeState.todoStore.filterBy)
+    const maxPage = useSelector(storeState => storeState.todoStore.maxPage)
+    const loggedinUser = useSelector(storeState => storeState.userStore.loggedinUser)
 
     // Special hook for accessing search-params:
     const [searchParams, setSearchParams] = useSearchParams()
@@ -81,7 +81,11 @@ export function TodoIndex() {
             return
         }
         toggleTodo(todo)
-            .then(savedTodo => showSuccessMsg(`Todo is ${(savedTodo.isDone)? 'done' : 'back on your list'}`))
+            .then(savedTodo => {
+                showSuccessMsg(`Todo is ${(savedTodo.isDone)? 'done' : 'back on your list'}`)
+                // With the Active / Done filter, the todo doesn't belong to this list anymore - load the page again
+                if (filterBy.status) loadPage(filterBy)
+            })
             .catch(err => {
                 console.log('err:', err)
                 showErrorMsg('Cannot toggle todo ' + todo._id)

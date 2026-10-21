@@ -11,7 +11,7 @@ export function UserDetails() {
 
     const [user, setUser] = useState(null)
     const [userToEdit, setUserToEdit] = useState(null)
-    const loggedinUser = useSelector(storeState => storeState.loggedinUser)
+    const loggedinUser = useSelector(storeState => storeState.userStore.loggedinUser)
     const params = useParams()
     const navigate = useNavigate()
 

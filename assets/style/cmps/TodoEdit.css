@@ -52,3 +52,12 @@
 .todo-edit form button:hover {
     background-color: var(--clr1);
 }
+
+.todo-edit h2 {
+    margin-top: 0;
+}
+
+.todo-edit .cancel-btn {
+    margin: 0.5em 0 0;
+    text-align: center;
+}

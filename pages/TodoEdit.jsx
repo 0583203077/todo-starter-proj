@@ -3,7 +3,7 @@ import { showErrorMsg, showSuccessMsg } from "../services/event-bus.service.js"
 import { saveTodo } from "../store/actions/todo.actions.js"
 
 const { useState, useEffect } = React
-const { useNavigate, useParams } = ReactRouterDOM
+const { useNavigate, useParams, Link } = ReactRouterDOM
 const { useSelector } = ReactRedux
 
 export function TodoEdit() {
@@ -11,7 +11,7 @@ export function TodoEdit() {
     const [todoToEdit, setTodoToEdit] = useState(todoService.getEmptyTodo())
     // Was the todo done when we opened it? Needed to know if it changed from not done to done
     const [wasDone, setWasDone] = useState(false)
-    const loggedinUser = useSelector(storeState => storeState.loggedinUser)
+    const loggedinUser = useSelector(storeState => storeState.userStore.loggedinUser)
     const navigate = useNavigate()
     const params = useParams()
 
@@ -22,10 +22,16 @@ export function TodoEdit() {
     function loadTodo() {
         todoService.get(params.todoId)
             .then(todo => {
-                setTodoToEdit(todo)
+                // get() adds nextTodoId / prevTodoId for the details page - we don't want to save them
+                const { nextTodoId, prevTodoId, ...todoFields } = todo
+                setTodoToEdit(todoFields)
                 setWasDone(todo.isDone)
             })
-            .catch(err => console.log('err:', err))
+            .catch(err => {
+                console.log('err:', err)
+                showErrorMsg('Cannot find this todo')
+                navigate('/todo')
+            })
     }
 
     function handleChange({ target }) {
@@ -71,12 +77,13 @@ export function TodoEdit() {
 
     return (
         <section className="todo-edit">
+            <h2>{params.todoId ? 'Edit Todo' : 'Add Todo'}</h2>
             <form onSubmit={onSaveTodo} >
                 <label htmlFor="txt">Text:</label>
-                <input onChange={handleChange} value={txt} type="text" name="txt" id="txt" />
+                <input onChange={handleChange} value={txt} type="text" name="txt" id="txt" required autoFocus />
 
-                <label htmlFor="importance">Importance:</label>
-                <input onChange={handleChange} value={importance} type="number" name="importance" id="importance" />
+                <label htmlFor="importance">Importance (1-10):</label>
+                <input onChange={handleChange} value={importance} type="number" name="importance" id="importance" min="1" max="10" required />
 
                 <label htmlFor="isDone">isDone:</label>
                 <input onChange={handleChange} checked={isDone} disabled={!loggedinUser} type="checkbox" name="isDone" id="isDone" />
@@ -86,8 +93,8 @@ export function TodoEdit() {
                 {/* Older todos were saved without a color - show the default one */}
                 <input onChange={handleChange} value={color || '#99a695'} type="color" name="color" id="color" />
 
-
                 <button>Save</button>
+                <Link to="/todo" className="btn cancel-btn">Cancel</Link>
             </form>
         </section>
     )

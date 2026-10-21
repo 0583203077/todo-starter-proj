@@ -13,9 +13,9 @@ import { loadDoneTodosPercent } from '../store/actions/todo.actions.js'
 
 export function AppHeader() {
     const navigate = useNavigate()
-    const user = useSelector(storeState => storeState.loggedinUser)
-    const todos = useSelector(storeState => storeState.todos)
-    const doneTodosPercent = useSelector(storeState => storeState.doneTodosPercent)
+    const user = useSelector(storeState => storeState.userStore.loggedinUser)
+    const todos = useSelector(storeState => storeState.todoStore.todos)
+    const doneTodosPercent = useSelector(storeState => storeState.todoStore.doneTodosPercent)
 
     // Recalculate whenever the todos in the store change (load, add, update, remove)
     useEffect(() => {

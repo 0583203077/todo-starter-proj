@@ -26,12 +26,33 @@
 .todo-details button {
     margin-left: 0;
 }
+/* Importance, color, dates */
+.todo-info-list {
+    margin-bottom: 1em;
+}
+.todo-info-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    padding: 0.3em 0;
+}
+.todo-info-list li > span:first-child {
+    min-width: 7em;
+    font-weight: 600;
+    color: var(--clr2);
+}
+.todo-details .color-swatch {
+    width: 1.5em;
+    height: 1.5em;
+    border-radius: 4px;
+    border: 1px solid rgb(210, 210, 210);
+}
 /* Next / Previous links */
-.todo-details a {
+.todo-details a:not(.btn) {
     color: var(--clr2);
     font-weight: bold;
     margin: 0 0.3em;
 }
-.todo-details a:hover {
+.todo-details a:not(.btn):hover {
     text-decoration: underline;
 }

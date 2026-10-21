@@ -41,7 +41,7 @@ export function LoginSignup({ onLoggedIn }) {
         signup(credentials)
             .then(onLoggedIn)
             .then(() => { showSuccessMsg('Signed in successfully') })
-            .catch((err) => { showErrorMsg('Oops try again') })
+            .catch((err) => { showErrorMsg('Cannot sign up - maybe the username is taken') })
     }
 
     return (

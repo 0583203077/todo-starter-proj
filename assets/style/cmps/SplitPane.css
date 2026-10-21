@@ -4,3 +4,15 @@
     transition: 0.5s;
     cursor: pointer;
 }
+
+/* Small phones: the panes are too narrow side by side - show them one under the other */
+@media (max-width: 480px) {
+    .split-pane {
+        flex-direction: column;
+    }
+
+    /* !important - the width is an inline style that the component sets on click */
+    .split-pane > div {
+        width: auto !important;
+    }
+}

@@ -3,8 +3,8 @@ import { TodoProgress } from "./TodoProgress.jsx"
 const { useSelector } = ReactRedux
 
 export function AppFooter() {
-    const doneTodosPercent = useSelector(storeState => storeState.doneTodosPercent)
-    const user = useSelector(storeState => storeState.loggedinUser)
+    const doneTodosPercent = useSelector(storeState => storeState.todoStore.doneTodosPercent)
+    const user = useSelector(storeState => storeState.userStore.loggedinUser)
 
     // The loggedin user's color preferences color the footer (no user - the default colors from the CSS)
     const prefsStyle = (user && user.prefs) ? { color: user.prefs.color, backgroundColor: user.prefs.bgColor } : {}

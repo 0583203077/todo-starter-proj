@@ -1,5 +1,6 @@
 import { userService } from "../../services/user.service.js"
-import { store, SET_USER, SET_USER_BALANCE } from "../store.js"
+import { store } from "../store.js"
+import { SET_USER, SET_USER_BALANCE } from "../reducers/user.reducer.js"
 
 // Each action calls the userService and then commits the result to the store.
 // The component that calls it shows the success / error message.

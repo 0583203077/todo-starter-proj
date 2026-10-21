@@ -101,7 +101,12 @@ function getImportanceStats() {
     return storageService.query(TODO_KEY)
         .then(todos => {
             const todoCountByImportanceMap = _getTodoCountByImportanceMap(todos)
-            const data = Object.keys(todoCountByImportanceMap).map(speedName => ({ title: speedName, value: todoCountByImportanceMap[speedName] }))
+            // The chart shows percents - how many of all the todos are in each group
+            const data = Object.keys(todoCountByImportanceMap).map(speedName => {
+                const count = todoCountByImportanceMap[speedName]
+                const percent = todos.length ? Math.round(count * 100 / todos.length) : 0
+                return { title: speedName, value: percent }
+            })
             return data
         })
 

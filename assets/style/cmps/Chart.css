@@ -1,7 +1,7 @@
   .chart {
       display: table;
       table-layout: fixed;
-      width: 60%;
+      width: 100%;
       max-width: 700px;
       height: 200px;
       margin: 0 auto;
@@ -22,7 +22,10 @@
   .chart span {
       margin: 0 1em;
       display: block;
-      background: rgba(209, 236, 250, 0.75);
+      background: var(--clr1bg);
+      border-radius: 6px 6px 0 0;
+      color: var(--gray3);
+      font-weight: 600;
       animation: draw 1s ease-in-out;
       font-size: .8em;
   }
